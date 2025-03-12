@@ -97,9 +97,73 @@ public class Menu {
     private static void updateEmployee() {
         System.out.println("Enter Employee ID to update:");
         String empID = scan.nextLine();
-        if (employeeService.updateEmployee(empID)) {
-            System.out.println("Employee updated successfully.");
-        } else {
+		Employee employee = employeeService.getEmployee(empID);
+		Employee updatedEmployee = new Employee();
+        if (employee != null) {
+			updatedEmployee.setEmpID(empID);
+            System.out.println("Employee successfully found.");
+			System.out.println("First Name:" + employee.getFName());
+			System.out.println("Enter new First Name (leave blank for no update):");
+			String fName = scan.nextLine();
+			if (!fName.isBlank()) {
+				updatedEmployee.setFName(fName);
+			} else {
+				updatedEmployee.setFName(employee.getFName());
+			}
+			System.out.println("Last Name:" + employee.getLName());
+			System.out.println("Enter new Last Name (leave blank for no update):");
+			String lName = scan.nextLine();
+			if (!lName.isBlank()) {
+				employee.setLName(lName);
+			} else {
+				updatedEmployee.setLName(employee.getLName());
+			}
+			System.out.println("Date of Employment:" + employee.getDoe());
+			System.out.println("Enter new Date of Employment (yyyy-MM-dd) (leave blank for no update):");
+			String doeStr = scan.nextLine();
+			if (!doeStr.isBlank()) {
+				try {
+					Date doe = new SimpleDateFormat("yyyy-MM-dd").parse(doeStr);
+					updatedEmployee.setDoe(doe);
+				} catch (ParseException e) {
+					System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+				}
+			} else {
+				updatedEmployee.setDoe(employee.getDoe());
+			}
+			System.out.println("Salary:" + employee.getSalary());
+			System.out.println("Enter new Salary (leave blank for no update):");
+			String salaryStr = scan.nextLine();
+			if (!salaryStr.isBlank()) {
+				int salary = Integer.parseInt(salaryStr);
+				updatedEmployee.setSalary(salary);
+			} else {
+				updatedEmployee.setSalary(employee.getSalary());
+			}
+			System.out.println("Department:" + employee.getDepartment());
+			System.out.println("Enter new Department (leave blank for no update):");
+			String department = scan.nextLine();
+			if (!department.isBlank()) {
+				updatedEmployee.setDepartment(department);
+			} else {
+				updatedEmployee.setDepartment(employee.getDepartment());
+			}
+			System.out.println("Old Employee Details: " + employee);
+			System.out.println("New Employee Details: " + updatedEmployee);
+			String confirm = "n";
+			System.out.println("Please type 'y' to confirm update or any other key to cancel:");
+			confirm = scan.nextLine();
+			if (!confirm.equalsIgnoreCase("y")) {
+				System.out.println("Update cancelled.");
+				return;
+			}
+			if (employeeService.updateEmployee(updatedEmployee)) {
+				System.out.println("Employee updated successfully.");
+			} else {
+				System.out.println("Unable to update employee.");
+			}
+
+		} else {
             System.out.println("Employee not found.");
         }
     }
@@ -123,6 +187,8 @@ public class Menu {
         } else {
             System.out.println("Employee not found.");
         }
+		System.out.println("Press enter to continue.");
+		scan.nextLine();
     }
 
     private static void listAllEmployees() {
@@ -135,5 +201,7 @@ public class Menu {
                 System.out.println(employee);
             }
         }
+		System.out.println("Press enter to continue.");
+		scan.nextLine();
     }
 }

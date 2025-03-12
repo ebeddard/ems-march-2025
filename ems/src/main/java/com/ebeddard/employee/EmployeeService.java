@@ -7,21 +7,21 @@ import java.util.stream.Collectors;
 
 public class EmployeeService implements EmployeeDao {
     // a map linking employee IDs to employeesa
-    private Map<String, Employee> empIDMap = new HashMap<>();
+    private Map<String, Employee> empMap = new HashMap<>();
 
     @Override
     public Boolean addEmployee(Employee e) {
-        if(!empIDMap.containsKey(e.getEmpID())) { // won't add duplicates
-            empIDMap.put(e.getEmpID(), e);
+        if(!empMap.containsKey(e.getEmpID())) { // 1 employee per ID
+            empMap.put(e.getEmpID(), e);
             return true;
         }
         return false;
     }
 
     @Override
-    public Boolean updateEmployee(String id) {
-        if(empIDMap.containsKey(id)) {
-            empIDMap.remove(id);
+    public Boolean updateEmployee(Employee e) {
+        if(empMap.containsKey(e.getEmpID())) {
+            empMap.put(e.getEmpID(), e);    // add updated employee
             return true;
         }
         return false;
@@ -29,8 +29,8 @@ public class EmployeeService implements EmployeeDao {
 
     @Override
     public Boolean removeEmployee(String id) {
-        if(empIDMap.containsKey(id)) {
-            empIDMap.remove(id);
+        if(empMap.containsKey(id)) {
+            empMap.remove(id);
             return true;
         }
         return false;
@@ -38,11 +38,11 @@ public class EmployeeService implements EmployeeDao {
 
     @Override
     public Employee getEmployee(String id) {
-        return empIDMap.get(id);
+        return empMap.get(id);
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-        return empIDMap.values().stream().collect(Collectors.toList());
+        return empMap.values().stream().collect(Collectors.toList());
     }
 }
